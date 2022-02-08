@@ -23,4 +23,8 @@ class Person
   def can_use_services?
     of_age? || @parent_permission
   end
+
+  def validate_name
+    @name = @corrector.correct_name(@name)
+  end
 end
