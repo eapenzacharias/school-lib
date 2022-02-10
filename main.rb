@@ -11,6 +11,32 @@ class Library
     @rentals = []
   end
 
+  def list_all_books
+    puts 'Library is empty' if @books.empty?
+
+    @books.each do |book|
+      print "Title: #{book.title.capitalize}, Author: #{book.author.capitalize}\n"
+    end
+  end
+
+  def list_all_people
+    puts 'Library is empty' if @people.empty?
+    @people.each do |person|
+      print "[#{person.class.name}] Name: #{person.name.capitalize}, ID: #{person.id}, Age: #{person.age}\n"
+    end
+  end
+
+  def list_all_rental
+    print 'ID of person: '
+    id = gets.chomp.to_i
+    puts 'Rentals: '
+    rentals = @rentals.select { |rental| rental.person.id == id }
+    puts 'No rental found' if rentals.empty?
+    rentals.each do |rental|
+      print "Date: #{rental.date}, Book \'#{rental.book.title}\' by #{rental.book.author}\n"
+    end
+  end
+
   def print
     puts 'Welcome to School Library App'
     puts 'Please choose an option by entering a number:'
