@@ -78,6 +78,16 @@ class Library
     end
   end
 
+  def create_book
+    print 'Title: '
+    title = gets.chomp.capitalize
+    print 'Author: '
+    author = gets.chomp.capitalize
+    book = Book.new(title: title, author: author)
+    @books << book
+    puts 'Book created successfully'
+  end
+
   def print
     puts 'Welcome to School Library App'
     puts 'Please choose an option by entering a number:'
