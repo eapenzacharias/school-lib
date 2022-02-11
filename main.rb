@@ -37,6 +37,47 @@ class Library
     end
   end
 
+  def create_person
+    print 'Do you want to create a student (1) or a teacher (2)? [Input the number]: '
+
+    options = gets.chomp
+    print 'Age: '
+    age = gets.chomp
+    print 'Name: '
+    name = gets.chomp
+
+    case options
+    when '1'
+      print 'Classroom: '
+      classroom = gets.chomp
+      print 'Has parent permission? [y/n]: '
+      permission = gets.chomp
+      case permission
+      when 'y'
+        parent_permission = true
+      when 'n'
+        parent_permission = false
+      else
+        print 'Invalid input'
+      end
+
+      student = Student.new(age: age, name: name, classroom: classroom, parent_permission: parent_permission)
+      @people.push(student)
+
+      puts 'Person created successfully'
+    when '2'
+      print 'Specialization: '
+      specialization = gets.chomp
+
+      teacher = Teacher.new(age: age, name: name, specialization: specialization)
+      @people.push(teacher)
+
+      puts 'Teacher created successfully'
+    else
+      puts 'Please choose number 1 or 2'
+    end
+  end
+
   def print
     puts 'Welcome to School Library App'
     puts 'Please choose an option by entering a number:'
