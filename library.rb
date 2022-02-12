@@ -38,12 +38,10 @@ class Library
     end
     print 'ID of person: '
     id = gets.chomp.to_i
-    person = @people[id]
-    puts person.name
+    rentals = @rentals.filter {|rental| rental.person.id == id}
     puts 'Rentals: '
-    all_rentals = person.rentals
-    puts 'No rental found' if all_rentals.empty?
-    all_rentals.each do |rental|
+    puts 'No rental found' if rentals.empty?
+    rentals.each do |rental|
       print "Date: #{rental.date}, Book \'#{rental.book.title}\' by #{rental.book.author}\n"
     end
   end
@@ -55,7 +53,7 @@ class Library
     permission = ''
     loop do
       print "Invalid input. Enter again \n" if permission != ''
-      permission = gets.chomp
+      permission = gets.chomp.downcase
       break if %w[y n].include?(permission)
     end
     case permission
@@ -108,12 +106,12 @@ class Library
       print "Library/User is empty\n\n"
       return
     end
-    puts 'Select a book from the list by number'
+    puts 'Select a book from the list by Index number'
     @books.each_with_index do |book, i|
       print "#{i}. Title: #{book.title}, Author: #{book.author}\n"
     end
     book_index = gets.chomp.to_i
-    puts 'Select a person from the list by number no using ID'
+    puts 'Select a person from the list by Index number'
     @people.each_with_index do |person, i|
       print "#{i}. [#{person.class}] Name: #{person.name.capitalize}, ID:#{person.id}, Age: #{person.age}\n"
     end
