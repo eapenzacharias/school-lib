@@ -38,7 +38,7 @@ class Library
     end
     print 'ID of person: '
     id = gets.chomp.to_i
-    rentals = @rentals.filter {|rental| rental.person.id == id}
+    rentals = @rentals.filter { |rental| rental.person.id == id }
     puts 'Rentals: '
     puts 'No rental found' if rentals.empty?
     rentals.each do |rental|
