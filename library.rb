@@ -12,7 +12,7 @@ class Library
   end
 
   def list_all_books
-    if (@books.empty?)
+    if @books.empty?
       print "Library is empty\n\n"
       return
     end
@@ -22,7 +22,7 @@ class Library
   end
 
   def list_all_people
-    if (@people.empty?)
+    if @people.empty?
       print "No person added\n\n"
       return
     end
@@ -48,8 +48,29 @@ class Library
     end
   end
 
+  def create_student(age, name)
+    print 'Classroom: '
+    classroom = gets.chomp
+    print 'Has parent permission? [y/n]: '
+    permission = ''
+    loop do
+      print "Invalid input. Enter again \n" if permission != ''
+      permission = gets.chomp
+      break if %w[y n].include?(permission)
+    end
+    case permission
+    when 'y'
+      parent_permission = true
+    when 'n'
+      parent_permission = false
+    end
+    student = Student.new(age: age, name: name, classroom: classroom, parent_permission: parent_permission)
+    @people.push(student)
+    puts 'Person created successfully'
+  end
+
   def create_person
-    print ("Do you want to create a student (1) or a teacher (2)? [Input the number]: ")
+    print('Do you want to create a student (1) or a teacher (2)? [Input the number]: ')
 
     options = gets.chomp
     print 'Age: '
@@ -59,30 +80,12 @@ class Library
 
     case options
     when '1'
-      print 'Classroom: '
-      classroom = gets.chomp
-      print 'Has parent permission? [y/n]: '
-      permission = gets.chomp
-      case permission
-      when 'y'
-        parent_permission = true
-      when 'n'
-        parent_permission = false
-      else
-        print 'Invalid input'
-      end
-
-      student = Student.new(age: age, name: name, classroom: classroom, parent_permission: parent_permission)
-      @people.push(student)
-
-      puts 'Person created successfully'
+      create_student(age, name)
     when '2'
       print 'Specialization: '
       specialization = gets.chomp
-
       teacher = Teacher.new(age: age, name: name, specialization: specialization)
       @people.push(teacher)
-
       puts 'Teacher created successfully'
     else
       puts 'Please choose number 1 or 2'
@@ -97,6 +100,7 @@ class Library
     book = Book.new(title: title, author: author)
     @books << book
     puts 'Book created successfully'
+    nil
   end
 
   def create_rental
@@ -108,25 +112,16 @@ class Library
     @books.each_with_index do |book, i|
       print "#{i}. Title: #{book.title}, Author: #{book.author}\n"
     end
-
     book_index = gets.chomp.to_i
-    book = @books[book_index]
-
     puts 'Select a person from the list by number no using ID'
     @people.each_with_index do |person, i|
       print "#{i}. [#{person.class}] Name: #{person.name.capitalize}, ID:#{person.id}, Age: #{person.age}\n"
     end
-
     person_index = gets.chomp.to_i
-    person = @people[person_index]
-
     print "\nDate: "
-
     date = gets.chomp
     rental = Rental.new(date: date, person: @people[person_index], book: @books[book_index])
-
     @rentals << rental
-
     puts "Rental created\n"
   end
 
@@ -141,31 +136,39 @@ class Library
     puts '7 - Exit'
   end
 
+  # rubocop:disable Metrics\CyclomaticComplexity, Metrics/MethodLength
+
+  def call_methods(response)
+    case response
+    when '1'
+      list_all_books
+    when '2'
+      list_all_people
+    when '3'
+      create_person
+    when '4'
+      create_book
+    when '5'
+      create_rental
+    when '6'
+      list_all_rental
+    when '7'
+      puts 'Thanks for using our book library'
+      7
+    else
+      puts "\n"
+    end
+  end
+
+  # rubocop:enable Metrics\CyclomaticComplexity, Metrics/MethodLength
+
   def run
     response = nil
     loop do
       print_menu
       response = gets.chomp
       puts "\n"
-      case response
-      when '1'
-        list_all_books()
-      when '2'
-        list_all_people()
-      when '3'
-        create_person()
-      when '4'
-        create_book()
-      when '5'
-        create_rental()
-      when '6'
-        list_all_rental()
-      when '7'
-        puts 'Thanks for using our book library'
-        break
-      else
-        puts "\n"
-      end
+      break if call_methods(response) == 7
     end
   end
 end

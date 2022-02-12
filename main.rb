@@ -1,4 +1,4 @@
-require_relative './library.rb'
+require_relative './library'
 
 def main
   print "Welcome to School Library App\n\n"
